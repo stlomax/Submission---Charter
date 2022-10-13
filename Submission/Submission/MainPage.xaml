@@ -1,0 +1,72 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:Submission.ViewModels"
+             xmlns:md="clr-namespace:Submission.Models"
+             xmlns:eff="clr-namespace:Submission"
+             xmlns:bhr="clr-namespace:Submission"
+             x:DataType="vm:MainPageVM"
+             x:Class="Submission.MainPage">
+
+    <StackLayout>
+        <Label Text="Xam Submission" 
+               BackgroundColor="DodgerBlue"
+               TextColor="White"
+               HorizontalTextAlignment="Center"
+               FontSize="Title" 
+               Padding="30,10,30,10"/>
+
+        <StackLayout Orientation="Horizontal">
+            <Switch IsToggled="{Binding DoSortBySkillCount}"/>
+            <Label Text="Sort by skill count (default is sort by name)"/>
+        </StackLayout>
+        <Frame Margin="10" BorderColor="DarkGray">
+            <CollectionView ItemsSource="{Binding Candidates}">
+                <CollectionView.ItemsLayout>
+                    <LinearItemsLayout Orientation="Vertical" ItemSpacing="10"/>
+                </CollectionView.ItemsLayout>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                            <StackLayout x:DataType="md:Candidate">
+                            <Frame BorderColor="Silver" Margin="10">
+                                <StackLayout Spacing="0">
+                                    <StackLayout.GestureRecognizers>
+                                        <TapGestureRecognizer NumberOfTapsRequired="1" 
+                                                              Command="{Binding Source={RelativeSource AncestorType={x:Type vm:MainPageVM}}, Path=CandidateCommand}"
+                                                              CommandParameter="{Binding Source={RelativeSource Self}, Path=BindingContext}"/>
+                                    </StackLayout.GestureRecognizers>
+                                    <Label Text="{Binding Name}" 
+                                           HorizontalOptions="FillAndExpand" HorizontalTextAlignment="Center"
+                                           FontSize="Large">
+                                        <Label.Effects>
+                                            <eff:NameFormatEffect/>
+                                        </Label.Effects>
+                                    </Label>
+                                           
+                                    <Label Text="{Binding SkillCount, StringFormat='Skill Count: {0}'}" 
+                                           FontSize="Small" HorizontalTextAlignment="Center"/>
+                                </StackLayout>
+                            </Frame>
+                        </StackLayout>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </Frame>
+        <StackLayout x:Name="grpBackEnd" RadioButtonGroup.GroupName="RBGBackend">
+            <RadioButton Content="All Candidates" x:Name="rbAll" IsChecked="true" CheckedChanged="RB_CheckedChanged"/>
+            <RadioButton Content="Candidates with Backend Skills" x:Name="rbBackend">
+                <RadioButton.Behaviors>
+                    <bhr:RadioButtonBehavior/>
+                </RadioButton.Behaviors>
+            </RadioButton>
+        </StackLayout>
+
+        <StackLayout VerticalOptions="End" BackgroundColor="Khaki">
+            <Label Text="Using switch to sort by name/skill count."/>
+            <Label Text="Using radio buttons to filter candidates by those with back-end skills."/>
+            <Label Text="Using effects to change name background color to android-orange, ios-magenta."/>
+            <Label Text="Using behavior to change the text red when backend skills button is selected."/>
+        </StackLayout>
+    </StackLayout>
+
+</ContentPage>

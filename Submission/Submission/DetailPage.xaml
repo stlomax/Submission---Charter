@@ -1,0 +1,71 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:Submission.ViewModels"
+             xmlns:md="clr-namespace:Submission.Models"
+             xmlns:cnv="clr-namespace:Submission.Converter"
+             xmlns:ctl="clr-namespace:Submission"
+             x:DataType="vm:DetailPageVM"
+             x:Class="Submission.DetailPage">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <cnv:SkillEnumToStringConverter x:Key="enumToStr" />
+            <cnv:ProficientToStringConverter x:Key="profToStr" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <ContentPage.Content>
+        <StackLayout>
+            <Label Text="Welcome to DetailPage!"
+                VerticalOptions="CenterAndExpand" 
+                HorizontalOptions="CenterAndExpand" />
+
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="0.3*"/>
+                    <ColumnDefinition Width="0.7*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="1.0*"/>
+                    <RowDefinition Height="1.0*"/>
+                    <RowDefinition Height="1.0*"/>
+                </Grid.RowDefinitions>
+
+                <Label Grid.Column="0" Grid.Row="0" Text="Name"/>
+                <Label Grid.Column="0" Grid.Row="1" Text="Email"/>
+                <Label Grid.Column="0" Grid.Row="2" Text="University"/>
+                <Label Grid.Column="1" Grid.Row="0" Text="{Binding Name}"/>
+                <Label Grid.Column="1" Grid.Row="1" Text="{Binding Email}"/>
+                <Label Grid.Column="1" Grid.Row="2" Text="{Binding University}"/>
+            </Grid>
+
+            <Label FontSize="Large">
+                <Label.Text>
+                    <OnPlatform x:TypeArguments="x:String">
+                        <On Platform="iOS" Value="SKILLS ON THE iOS"/>
+                        <On Platform="Android" Value="SKILLS ON THE ANDROID"/>
+                    </OnPlatform>
+
+                </Label.Text>                
+            </Label>
+            <CollectionView ItemsSource="{Binding Skills}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <StackLayout x:DataType="md:Skill" Orientation="Horizontal">
+                            <Grid>
+                                <Label Grid.Column="0" Text="{Binding SkillSet, Converter={StaticResource enumToStr}}"/>
+                                <ctl:DifferentLabel Grid.Column="1" Text="{Binding Profiency, Converter={StaticResource profToStr}}"/>
+                                <Label Grid.Column="2" Text="{Binding Years, StringFormat='{0} years'}"/>
+                            </Grid>
+                        </StackLayout>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+            <Button Text="CLOSE" BorderColor="Black" CornerRadius="10" Clicked="Button_Clicked"/>
+            <StackLayout VerticalOptions="End">
+                <Label Text="Using converter to change skill enum to string." BackgroundColor="Khaki"/>
+                <Label Text="Using renderer to change label bkgd color to green." BackgroundColor="Yellow"/>
+                <Label Text="Dependent on platform, skills header will show which platform is running." BackgroundColor="LightYellow"/>
+            </StackLayout>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>
